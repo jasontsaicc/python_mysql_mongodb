@@ -144,7 +144,17 @@ BASE.metadata.create_all(engine)
 
 
 # 調試echo=True 可以看到數據庫的操作
+
+
+# 數據的更新操作
 s = Session()
-users = s.query(User).filter(User.username == 'test1')
-for u in users:
-    print(u)
+u = s.query(User).filter(User.username == 'test1').first()
+# 這時候的u 就是一個User的實例
+print(u)
+# # u是User的對象, 所以可以調用password這個屬性
+print(u.password)
+
+# 更新數據 這時候要如何提交呢?
+u.password = 'test111111111'
+# 使用session.commit()提交數據 會自動的去更新數據庫
+s.commit()
