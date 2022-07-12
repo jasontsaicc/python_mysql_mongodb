@@ -27,6 +27,7 @@ class User(BASE):
 
     # 這裡要改成sa.func.now()
     create_at = sa.Column(sa.DateTime, server_default=sa.func.now())
+
     # 只要傳入 username, password, email
     # ID, create_at 都會自動填入
 
@@ -111,3 +112,15 @@ BASE.metadata.create_all(engine)
 # for u in users:
 #     print(u)
 
+
+# filter 過濾條件的寫法
+# query.filter(User.name.in_([’test1’, ‘test2’…]))
+# s = Session()
+# users = s.query(User).filter(User.username.in_(['test1', 'test2']))
+# for u in users:
+#     print(u)
+
+s = Session()
+users = s.query(User).filter(User.username.like("%es%"))
+for u in users:
+    print(u)
