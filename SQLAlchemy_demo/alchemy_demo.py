@@ -37,7 +37,7 @@ class User(BASE):
 
 
 # 使用sa.create_engine設定數據庫的連接信息
-engine = sa.create_engine('mysql+pymysql://root:00065638@localhost:3306/demo')
+engine = sa.create_engine('mysql+pymysql://root:00065638@localhost:3306/demo', echo=True)
 # 定義session 可以去連接數據庫 用來插入數據, 查詢數據
 Session = sa.orm.sessionmaker(bind=engine)
 
@@ -125,17 +125,26 @@ BASE.metadata.create_all(engine)
 # for u in users:
 #     print(u)
 
-s = Session()
+# 如何 select columns
 
-# SELECT id, username FROM user
-u1 = s.query(User)
-for u in u1:
-    print(u, type(u))
-# 可以看出上下兩者的區別
-# id=1, username=test1, email=test1@test1.com <class '__main__.User'>
-
-
-p2 = s.query(User.id, User.username)
-for u in p2:
-    print(u, type(u))
+# s = Session()
+#
+# # SELECT id, username FROM user
+# u1 = s.query(User)
+# for u in u1:
+#     print(u, type(u))
+# # 可以看出上下兩者的區別
+# # id=1, username=test1, email=test1@test1.com <class '__main__.User'>
+#
+#
+# p2 = s.query(User.id, User.username)
+# for u in p2:
+#     print(u, type(u))
     # (1, 'test1') <class 'sqlalchemy.engine.row.Row'>
+
+
+# 調試echo=True 可以看到數據庫的操作
+s = Session()
+users = s.query(User).filter(User.username == 'test1')
+for u in users:
+    print(u)
