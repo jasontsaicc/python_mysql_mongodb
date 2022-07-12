@@ -30,6 +30,10 @@ class User(BASE):
     # 只要傳入 username, password, email
     # ID, create_at 都會自動填入
 
+    # 添加repr方法 返回的是print的結果
+    def __repr__(self):
+        return "id={}, username={}, email={}".format(self.id, self.username, self.email)
+
 
 # 使用sa.create_engine設定數據庫的連接信息
 engine = sa.create_engine('mysql+pymysql://root:00065638@localhost:3306/demo')
@@ -41,19 +45,69 @@ Session = sa.orm.sessionmaker(bind=engine)
 BASE.metadata.create_all(engine)
 
 # insert 數據 插入一個對象(User)的實例
-user1 = User(username='test1', password='test1', email='test1@test1.com')
-user2 = User(username='test2', password='test2', email='test2@test1.com')
-user3 = User(username='test3', password='test3', email='test3@test1.com')
+# user1 = User(username='test1', password='test1', email='test1@test1.com')
+# user2 = User(username='test2', password='test2', email='test2@test2.com')
+# user3 = User(username='test3', password='test3', email='test3@test3.com')
+#
+# # 建立一個session
+# session = Session()
+# # 有了session後 就可以調用session.add()去插入數據
+# # 插入單筆數據
+# # session.add(user1)
+# # 插入多筆數據
+# session.add_all([user1, user2, user3])
+# # 提交數據
+# session.commit()
 
-# 建立一個session
-session = Session()
-# 有了session後 就可以調用session.add()去插入數據
+# s = Session()
+# # 查詢數據
+# users = s.query(User)
+# # print(users)
+# # SELECT users.id AS users_id, users.username AS users_username, users.password AS users_password, users.email AS users_email, users.create_at AS users_create_at
+# # FROM users
+# for u in users:
+#     print(u)
 
-# 插入單筆數據
-# session.add(user1)
+# ## filter()過濾數據
+# 這時候的filter 相當於where 再用users來迭代
+# s = Session()
+# users = s.query(User).filter(User.username == 'test1')
+# # print(users)
+# for u in users:
+#     print(u)
 
-# 插入多筆數據
-session.add_all([user1, user2, user3])
+# 排序 order_by desc是降序
+# s = Session()
+# users = s.query(User).order_by(User.id.desc())
+# for u in users:
+#     print(u)
 
-# 提交數據
-session.commit()
+# query().all() 用list返回迭代後的值
+# 會一次性印出全部的數據 有可能塞爆記憶體
+
+# s = Session()
+# users = s.query(User).all()
+# print(users)
+
+# 只跑出第一筆數據query().first()
+# s = Session()
+# users = s.query(User).first()
+# print(users)
+
+# 可以用來判斷數據是否存在query().first()
+# s = Session()
+# users = s.query(User).filter(User.username == 'test1').first()
+# print(users)
+
+# 在需要驗證用戶名是否存在 也可以這樣寫
+# if users:
+#     print('用戶名已存在')
+# else:
+#     print('用戶名可以使用')
+
+# query().limit() 只取前n筆數據
+# s = Session()
+# users = s.query(User).limit(2)
+# for u in users:
+#     print(u)
+
